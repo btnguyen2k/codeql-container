@@ -5,11 +5,11 @@
 FROM ubuntu:22.04 AS codeql_base
 LABEL maintainer="btnguyen2k"
 
-# tzdata install needs to be non-interactive
-ENV DEBIAN_FRONTEND=noninteractive
+# # tzdata install needs to be non-interactive
+# ENV DEBIAN_FRONTEND=noninteractive
 
 ARG USERNAME=codeql
-ENV CODEQL_HOME /usr/local/codeql-home
+ARG CODEQL_HOME /usr/local/codeql-home
 
 # create user, install/update basics and python
 RUN adduser --home ${CODEQL_HOME} ${USERNAME} && \
@@ -44,8 +44,6 @@ RUN adduser --home ${CODEQL_HOME} ${USERNAME} && \
         && \
         apt-get clean
 
-ENV PYTHONIOENCODING=utf-8
-
 # Install Go
 ARG GOVER=1.21.5
 RUN cd /tmp && \
@@ -70,13 +68,21 @@ RUN apt-get install -y --no-install-recommends openjdk-${JDKVER}-jre-headless
 RUN apt-get clean && apt-get autoremove
 
 # Install CodeQL
+USER ${USERNAME}
 ARG CODEQLVER=2.15.5
 RUN cd /tmp && \
     curl -OL https://github.com/github/codeql-action/releases/download/codeql-bundle-v${CODEQLVER}/codeql-bundle-linux64.tar.gz && \
     tar -xvf /tmp/codeql-bundle-linux64.tar.gz --directory ${CODEQL_HOME} && \
     rm /tmp/codeql-bundle-linux64.tar.gz
 
+# RUN chown -R ${USERNAME}:${USERNAME} ${CODEQL_HOME}
+
 # Make final image
 FROM scratch AS final
 COPY --from=codeql_base / /
 
+ENV CODEQL_HOME /usr/local/codeql-home
+ENV PYTHONIOENCODING=utf-8
+ENV PATH="/usr/local/go/bin:${PATH}"
+ENV PATH="${CODEQL_HOME}/codeql:${PATH}"
+USER ${USERNAME}

@@ -71,10 +71,13 @@ RUN cd /tmp && \
 # RUN chown -R ${USERNAME}:${USERNAME} ${CODEQL_HOME}
 
 # Make final image
-#FROM scratch AS final
-#COPY --from=codeql_base / /
+FROM scratch
+COPY --from=codeql_base / /
 
-ENV CODEQL_HOME=/usr/local/codeql-home
+ARG USERNAME=codeql
+ARG CODEQL_HOME=/usr/local/codeql-home
+
+ENV CODEQL_HOME=${CODEQL_HOME}
 ENV PYTHONIOENCODING=utf-8
 ENV PATH="/usr/local/go/bin:${PATH}"
 ENV PATH="${CODEQL_HOME}/codeql:${PATH}"

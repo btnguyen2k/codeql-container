@@ -44,6 +44,8 @@ RUN adduser --home ${CODEQL_HOME} ${USERNAME} && \
         && \
         apt-get clean
 
+ENV PYTHONIOENCODING=utf-8
+
 # Install Go
 ARG GOVER=1.21.5
 RUN cd /tmp && \
@@ -66,6 +68,13 @@ RUN apt-get install -y --no-install-recommends openjdk-${JDKVER}-jre-headless
 
 # Clean up
 RUN apt-get clean && apt-get autoremove
+
+# Install CodeQL
+ARG CODEQLVER=2.15.5
+RUN cd /tmp && \
+    curl -OL https://github.com/github/codeql-action/releases/download/codeql-bundle-v${CODEQLVER}/codeql-bundle-linux64.tar.gz && \
+    tar -xvf /tmp/codeql-bundle-linux64.tar.gz --directory ${CODEQL_HOME} && \
+    rm /tmp/codeql-bundle-linux64.tar.gz
 
 # Make final image
 FROM scratch AS final

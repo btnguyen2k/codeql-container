@@ -1,6 +1,6 @@
 # Dockerfile to build CodeQL container
 # Sample build command:
-# docker build --rm -t btnguyen2k/codeql-container-all -f Dockerfile .
+# docker build --rm -t btnguyen2k/codeql-container -f Dockerfile .
 
 FROM ubuntu:22.04 AS codeql_base
 LABEL maintainer="btnguyen2k"
@@ -17,10 +17,10 @@ RUN adduser --home ${CODEQL_HOME} ${USERNAME} && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
         software-properties-common \
-        nodejs \
-        vim \
+#        nodejs \
+#        vim \
         curl \
-        wget \
+#        wget \
         git \
         git-lfs \
         build-essential \
@@ -37,12 +37,33 @@ RUN adduser --home ${CODEQL_HOME} ${USERNAME} && \
         make \
         gcc \
         apt-utils \
-        rsync \
-        file \
-        dos2unix \
-        gettext && \
+#        rsync \
+#        file \
+#        dos2unix \
+#        gettext \
+        && \
         apt-get clean
 
+# Install Go
+ARG GOVER=1.21.5
+RUN cd /tmp && \
+    curl -OL https://golang.org/dl/go${GOVER}.linux-amd64.tar.gz && \
+    tar -C /usr/local -xvf go${GOVER}.linux-amd64.tar.gz && \
+    rm -rf /tmp/go${GOVER}.linux-amd64.tar.gz
+
+# Install .NET Core
+ARG DOTNETVER=8.0
+RUN cd /tmp && \
+    curl -OL https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb && \
+    dpkg -i packages-microsoft-prod.deb && \
+    apt-get update && \
+    apt-get install -y dotnet-sdk-${DOTNETVER} && \
+    rm packages-microsoft-prod.deb
+
 # Clean up
-RUN apt autoremove
+RUN apt-get clean && apt-get autoremove
+
+# Make final image
+FROM scratch AS final
+COPY --from=codeql_base / /
 

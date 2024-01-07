@@ -9,7 +9,7 @@ LABEL maintainer="btnguyen2k"
 # ENV DEBIAN_FRONTEND=noninteractive
 
 ARG USERNAME=codeql
-ARG CODEQL_HOME /usr/local/codeql-home
+ARG CODEQL_HOME=/usr/local/codeql-home
 
 # create user, install/update basics and python
 RUN adduser --home ${CODEQL_HOME} ${USERNAME} && \
@@ -17,10 +17,7 @@ RUN adduser --home ${CODEQL_HOME} ${USERNAME} && \
     apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
         software-properties-common \
-#        nodejs \
-#        vim \
         curl \
-#        wget \
         git \
         git-lfs \
         build-essential \
@@ -37,10 +34,6 @@ RUN adduser --home ${CODEQL_HOME} ${USERNAME} && \
         make \
         gcc \
         apt-utils \
-#        rsync \
-#        file \
-#        dos2unix \
-#        gettext \
         && \
         apt-get clean
 
@@ -78,11 +71,14 @@ RUN cd /tmp && \
 # RUN chown -R ${USERNAME}:${USERNAME} ${CODEQL_HOME}
 
 # Make final image
-FROM scratch AS final
-COPY --from=codeql_base / /
+#FROM scratch AS final
+#COPY --from=codeql_base / /
 
-ENV CODEQL_HOME /usr/local/codeql-home
+ENV CODEQL_HOME=/usr/local/codeql-home
 ENV PYTHONIOENCODING=utf-8
 ENV PATH="/usr/local/go/bin:${PATH}"
 ENV PATH="${CODEQL_HOME}/codeql:${PATH}"
 USER ${USERNAME}
+WORKDIR ${CODEQL_HOME}
+ENTRYPOINT ["bash"]
+

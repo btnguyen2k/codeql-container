@@ -51,14 +51,18 @@ RUN cd /tmp && \
     tar -C /usr/local -xvf go${GOVER}.linux-amd64.tar.gz && \
     rm -rf /tmp/go${GOVER}.linux-amd64.tar.gz
 
-# Install .NET Core
+# Install .NET SDK
 ARG DOTNETVER=8.0
 RUN cd /tmp && \
     curl -OL https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     apt-get update && \
-    apt-get install -y dotnet-sdk-${DOTNETVER} && \
+    apt-get install -y --no-install-recommends dotnet-sdk-${DOTNETVER} && \
     rm packages-microsoft-prod.deb
+
+# Install JDK
+ARG JDKVER=21
+RUN apt-get install -y --no-install-recommends openjdk-${JDKVER}-jre-headless
 
 # Clean up
 RUN apt-get clean && apt-get autoremove

@@ -2,7 +2,7 @@
 # Sample build command:
 # docker build --rm -t btnguyen2k/codeql-container -f Dockerfile .
 
-FROM ubuntu:22.04 AS codeql_base
+FROM ubuntu:23.10 AS codeql_base
 LABEL maintainer="btnguyen2k"
 
 # # tzdata install needs to be non-interactive

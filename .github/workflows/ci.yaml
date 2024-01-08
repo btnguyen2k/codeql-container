@@ -9,7 +9,8 @@ on:
   workflow_call:
 
 env:
-  DOCKER_IMAGE: btnguyen2k/codeql-container
+  DOCKER_IMAGE: 'btnguyen2k/codeql-container'
+  TAG_PREFIX: 'v'
 
 jobs:
   Build:
@@ -28,3 +29,30 @@ jobs:
             ${{ env.DOCKER_IMAGE}}
           file: ./Dockerfile
           context: ./
+
+  ReleaseDryRun:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      RESULT: ${{ steps.release_dry_run.outputs.result }}
+      VERSION: ${{ steps.release_dry_run.outputs.releaseVersion }}
+      RELEASE_NOTES: ${{ steps.release_dry_run.outputs.releaseNotes }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Release (dry-run)
+        id: release_dry_run
+        uses: btnguyen2k/action-semrelease@v3
+        with:
+          dry-run: true
+          auto-mode: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          tag-major-release: false
+          tag-minor-release: false
+          branches: ${{ github.ref_name }}
+          tag-prefix: ${{ env.TAG_PREFIX }}
+          tag-only: true

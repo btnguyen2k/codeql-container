@@ -2,7 +2,7 @@
 # Sample build command:
 # docker build --rm -t btnguyen2k/codeql-container -f Dockerfile .
 
-FROM ubuntu:23.10 AS codeql_base
+FROM ubuntu:22.04 AS codeql_base
 LABEL maintainer="btnguyen2k"
 
 # # tzdata install needs to be non-interactive
@@ -47,8 +47,18 @@ RUN cd /tmp && \
 RUN /usr/local/go/bin/go version
 
 # Install .NET SDK
-ARG DOTNETVER=8.0
-RUN apt-get install -y dotnet-sdk-${DOTNETVER}
+RUN arch=$(dpkg --print-architecture) && \
+if [[ "$arch" == "amd64" ]]; then \
+    apt-get install -y dotnet-sdk-7.0
+else \
+    cd /tmp && \
+    curl -OL https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb && \
+    dpkg -i packages-microsoft-prod.deb && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends dotnet-sdk-8.0 && \
+    rm packages-microsoft-prod.deb
+fi && \
+# ARG DOTNETVER=8.0
 # RUN cd /tmp && \
 #     curl -OL https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb && \
 #     dpkg -i packages-microsoft-prod.deb && \

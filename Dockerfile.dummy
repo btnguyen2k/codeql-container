@@ -48,7 +48,7 @@ RUN /usr/local/go/bin/go version
 
 # Install .NET SDK
 ARG DOTNETVER=8.0
-RUN apt-get install -y --no-install-recommends dotnet-sdk-${DOTNETVER}
+RUN snap install dotnet-sdk --channel=${DOTNETVER}/stable
 # RUN cd /tmp && \
 #     curl -OL https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb && \
 #     dpkg -i packages-microsoft-prod.deb && \

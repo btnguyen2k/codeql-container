@@ -40,9 +40,10 @@ RUN adduser --home ${CODEQL_HOME} ${USERNAME} && \
 # Install Go
 ARG GOVER=1.21.5
 RUN cd /tmp && \
-    curl -OL https://golang.org/dl/go${GOVER}.linux-amd64.tar.gz && \
-    tar -C /usr/local -xvf go${GOVER}.linux-amd64.tar.gz && \
-    rm -rf /tmp/go${GOVER}.linux-amd64.tar.gz
+    arch=$(dpkg --print-architecture) && \
+    curl -OL https://golang.org/dl/go${GOVER}.linux-${arch}.tar.gz && \
+    tar -C /usr/local -xvf go${GOVER}.linux-${arch}.tar.gz && \
+    rm -rf /tmp/go${GOVER}.linux-${arch}.tar.gz
 
 # Install .NET SDK
 ARG DOTNETVER=8.0

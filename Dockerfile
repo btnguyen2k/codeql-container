@@ -67,6 +67,8 @@ RUN cd /tmp && \
     curl -OL https://github.com/github/codeql-action/releases/download/codeql-bundle-v${CODEQLVER}/codeql-bundle-linux64.tar.gz && \
     tar -xvf /tmp/codeql-bundle-linux64.tar.gz --directory ${CODEQL_HOME} && \
     rm /tmp/codeql-bundle-linux64.tar.gz
+COPY --chown=${USERNAME}:${USERNAME} scripts /usr/local/scripts
+RUN chmod "+x" /usr/local/scripts/*.sh
 
 # RUN chown -R ${USERNAME}:${USERNAME} ${CODEQL_HOME}
 
@@ -83,5 +85,7 @@ ENV PATH="/usr/local/go/bin:${PATH}"
 ENV PATH="${CODEQL_HOME}/codeql:${PATH}"
 USER ${USERNAME}
 WORKDIR ${CODEQL_HOME}
-ENTRYPOINT ["bash"]
+ENV VERSION="<placeholder>"
 
+ENTRYPOINT ["bash", "/usr/local/scripts/entry.sh"]
+CMD ["help"]

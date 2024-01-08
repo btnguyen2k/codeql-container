@@ -48,7 +48,7 @@ RUN /usr/local/go/bin/go version
 
 # Install .NET SDK
 RUN arch=$(dpkg --print-architecture) && \
-    if [[ "$arch" == "amd64" ]]; then \
+    if [ "$arch" == "amd64" ]; then \
         apt-get install -y --no-install-recommends dotnet-sdk-7.0 \
     else \
         cd /tmp && \

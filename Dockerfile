@@ -44,19 +44,29 @@ RUN cd /tmp && \
     curl -OL https://golang.org/dl/go${GOVER}.linux-${arch}.tar.gz && \
     tar -C /usr/local -xvf go${GOVER}.linux-${arch}.tar.gz && \
     rm -rf /tmp/go${GOVER}.linux-${arch}.tar.gz
+RUN /usr/local/go/bin/go version
 
 # Install .NET SDK
 ARG DOTNETVER=8.0
-RUN cd /tmp && \
-    curl -OL https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb && \
-    dpkg -i packages-microsoft-prod.deb && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends dotnet-sdk-${DOTNETVER} && \
-    rm packages-microsoft-prod.deb
+RUN arch=$(dpkg --print-architecture) && \
+    if [ "${arch}" != "amd64" ]; then \
+        apt-get install -y --no-install-recommends dotnet-sdk-7.0 \
+        ; \
+    else \
+        cd /tmp && \
+        curl -OL https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb && \
+        dpkg -i packages-microsoft-prod.deb && \
+        apt-get update && \
+        apt-get install -y --no-install-recommends dotnet-sdk-${DOTNETVER} && \
+        rm packages-microsoft-prod.deb \
+        ; \
+    fi
+RUN dotnet --info
 
 # Install JDK
 ARG JDKVER=21
 RUN apt-get install -y --no-install-recommends openjdk-${JDKVER}-jre-headless
+RUN java -version
 
 # Clean up
 RUN apt-get clean && apt-get autoremove

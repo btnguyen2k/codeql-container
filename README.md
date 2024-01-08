@@ -47,6 +47,15 @@ Example:
 $ docker run -it --rm -v "$(pwd):/opt/src" -v "/tmp:/opt/results" btnguyen2k/codeql-container security --override --language=go --output=csv
 ```
 
+**Included packages/SDKs**
+
+- Ubuntu 22.04 + build-essential
+- Python v3.10
+- Go v1.21.5
+- Dotnet SDK v8.0 (_v7.0 for arm64_)
+- OpenJDK v21
+- CodeQL-bundle v2.15.5
+
 ## Credits
 
 This project draws inspiration from the [microsoft/codeql-container repository](https://github.com/microsoft/codeql-container) and incorporates insights from [travisgosselin's comment](https://github.com/microsoft/codeql-container/issues/53#issuecomment-1875879512).

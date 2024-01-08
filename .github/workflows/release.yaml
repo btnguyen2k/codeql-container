@@ -75,8 +75,8 @@ jobs:
           # platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ${{ env.DOCKER_IMAGE}}:${{ needs.ReleaseDryRun.outputs.VERSION }}
-            ${{ env.DOCKER_IMAGE}}:latest
+            ${{ env.DOCKER_IMAGE }}:${{ needs.ReleaseDryRun.outputs.VERSION }}
+            ${{ env.DOCKER_IMAGE }}:latest
           file: ./Dockerfile
           context: ./
       - name: Update release meta

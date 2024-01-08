@@ -4,9 +4,9 @@ on:
   push:
     branches: [ '*' ]
     paths:
-      - '.github/workflows/**'
+      - '.github/workflows/***'
       - 'Dockerfile'
-      - 'scripts/**'
+      - 'scripts/***'
   pull_request:
     types: [ opened, edited, reopened, synchronize, review_requested ]
     branches: [ '*' ]

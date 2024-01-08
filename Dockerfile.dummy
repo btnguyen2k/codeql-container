@@ -48,16 +48,16 @@ RUN /usr/local/go/bin/go version
 
 # Install .NET SDK
 RUN arch=$(dpkg --print-architecture) && \
-if [[ "$arch" == "amd64" ]]; then \
-    apt-get install -y dotnet-sdk-7.0
-else \
-    cd /tmp && \
-    curl -OL https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb && \
-    dpkg -i packages-microsoft-prod.deb && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends dotnet-sdk-8.0 && \
-    rm packages-microsoft-prod.deb
-fi && \
+    if [[ "$arch" == "amd64" ]]; then \
+        apt-get install -y dotnet-sdk-7.0
+    else \
+        cd /tmp && \
+        curl -OL https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb && \
+        dpkg -i packages-microsoft-prod.deb && \
+        apt-get update && \
+        apt-get install -y --no-install-recommends dotnet-sdk-8.0 && \
+        rm packages-microsoft-prod.deb
+    fi
 # ARG DOTNETVER=8.0
 # RUN cd /tmp && \
 #     curl -OL https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb && \

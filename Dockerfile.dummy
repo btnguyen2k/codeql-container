@@ -48,13 +48,15 @@ RUN /usr/local/go/bin/go version
 
 # Install .NET SDK
 ARG DOTNETVER=8.0
-RUN cd /tmp && \
-    curl -OL https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb && \
-    dpkg -i packages-microsoft-prod.deb && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends dotnet-sdk-${DOTNETVER} && \
-    rm packages-microsoft-prod.deb
+RUN apt-get install -y --no-install-recommends dotnet-sdk-${DOTNETVER}
+# RUN cd /tmp && \
+#     curl -OL https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb && \
+#     dpkg -i packages-microsoft-prod.deb && \
+#     apt-get update && \
+#     apt-get install -y --no-install-recommends dotnet-sdk-${DOTNETVER} && \
+#     rm packages-microsoft-prod.deb
 RUN dotnet --version
+RUN dotnet --info
 
 # Install JDK
 ARG JDKVER=21

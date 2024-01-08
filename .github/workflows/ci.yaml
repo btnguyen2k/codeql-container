@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/**'
       - 'Dockerfile'
+      - 'Dockerfile.*'
       - 'scripts/**'
   pull_request:
     types: [ opened, edited, reopened, synchronize, review_requested ]

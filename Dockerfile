@@ -68,6 +68,7 @@ RUN cd /tmp && \
     tar -xvf /tmp/codeql-bundle-linux64.tar.gz --directory ${CODEQL_HOME} && \
     rm /tmp/codeql-bundle-linux64.tar.gz
 COPY --chown=${USERNAME}:${USERNAME} scripts /usr/local/scripts
+COPY --chown=${USERNAME}:${USERNAME} LICENSE.md ${CODEQL_HOME}
 RUN chmod "+x" /usr/local/scripts/*.sh
 
 # RUN chown -R ${USERNAME}:${USERNAME} ${CODEQL_HOME}

@@ -34,6 +34,7 @@ RUN adduser --home ${CODEQL_HOME} ${USERNAME} && \
         make \
         gcc \
         apt-utils \
+        snapd \
         && \
         apt-get clean
 

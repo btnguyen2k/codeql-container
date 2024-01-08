@@ -34,7 +34,6 @@ RUN adduser --home ${CODEQL_HOME} ${USERNAME} && \
         make \
         gcc \
         apt-utils \
-        snapd \
         && \
         apt-get clean
 
@@ -49,7 +48,7 @@ RUN /usr/local/go/bin/go version
 
 # Install .NET SDK
 ARG DOTNETVER=8.0
-RUN snap install dotnet-sdk --channel=${DOTNETVER}/stable
+RUN apt-get install -y dotnet-sdk-${DOTNETVER}
 # RUN cd /tmp && \
 #     curl -OL https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb && \
 #     dpkg -i packages-microsoft-prod.deb && \

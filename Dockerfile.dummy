@@ -1,6 +1,6 @@
 # Dockerfile to build CodeQL container
 # Sample build command:
-# docker build --rm -t btnguyen2k/codeql-container -f Dockerfile .
+# docker build --rm -t temp -f Dockerfile.dummy .
 
 FROM ubuntu:22.04 AS codeql_base
 LABEL maintainer="btnguyen2k"
@@ -48,8 +48,9 @@ RUN /usr/local/go/bin/go version
 
 # Install .NET SDK
 RUN arch=$(dpkg --print-architecture) && \
-    if [ "$arch" == "amd64" ]; then \
+    if [ "${arch}" != "amd64" ]; then \
         apt-get install -y --no-install-recommends dotnet-sdk-7.0 \
+        ; \
     else \
         cd /tmp && \
         curl -OL https://packages.microsoft.com/config/ubuntu/22.04/packages-microsoft-prod.deb && \

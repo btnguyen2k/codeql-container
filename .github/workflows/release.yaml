@@ -27,7 +27,7 @@ jobs:
       RELEASE_NOTES: ${{ steps.release_dry_run.outputs.releaseNotes }}
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Install Node
         uses: actions/setup-node@v4
         with:
@@ -58,7 +58,7 @@ jobs:
       RELEASE_NOTES: ${{ needs.ReleaseDryRun.outputs.RELEASE_NOTES }}
     steps:
       - name: Check out code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx

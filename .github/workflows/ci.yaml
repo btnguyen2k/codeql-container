@@ -22,7 +22,7 @@ jobs:
     name: Build Docker image
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       # - name: Set up QEMU
       #   uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
@@ -46,7 +46,7 @@ jobs:
       RELEASE_NOTES: ${{ steps.release_dry_run.outputs.releaseNotes }}
     steps:
       - name: Check out code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Install Node
         uses: actions/setup-node@v6
         with:
